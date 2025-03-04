@@ -7,6 +7,7 @@ use App\Entity\Album;
 use App\Entity\Genre;
 use App\Entity\Artist;
 use App\Entity\Avatar;
+use App\Entity\SubscriptionPlan;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -81,6 +82,13 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::subMenu('Avatars', 'fa fa-image')->setSubItems([
             MenuItem::linkToCrud('Ajouter un avatar', 'fa fa-plus-circle', Avatar::class)->setAction(Crud::PAGE_NEW),
             MenuItem::linkToCrud('Voir les avatars', 'fa fa-eye', Avatar::class)
+        ]);
+
+        // Menu pour gerer les abonnements 
+        yield MenuItem::subMenu('Plan', 'fa fa-credit-card')->setSubItems([
+            MenuItem::linkToCrud('Ajouter un plan', 'fa fa-plus-circle', SubscriptionPlan::class)->setAction
+            (Crud::PAGE_NEW),
+            MenuItem::linkToCrud('Voir les abonnements', 'fa fa-eye', SubscriptionPlan::class)
         ]);
     }
 }
