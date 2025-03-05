@@ -8,6 +8,7 @@ use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -25,6 +26,28 @@ class RegistrationController extends AbstractController
     ): Response {
         //on récupère les datas envoyées par le front
         $data = json_decode($request->getContent(), true);
+
+        // On vérifie si l'utilisateur exite déja
+        $existingUser = $entityManager
+        ->getRepository(User::class)
+        ->findOneBy(['email' => $data['email']]);
+
+        if($existingUser){
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'L\'email est déjà utilisé'
+            ]);
+        }
+
+        // On vérifie que l'email est au format email
+        $validEmail = filter_var($data['email'], FILTER_VALIDATE_EMAIL);
+        if(!$validEmail){
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'L\'email n\'est pas valide'
+            ]);
+        }
+
         //on crée un nouvel utilisateur
         $user = new User();
         //on lui set les paramètres
