@@ -86,6 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, UserSubscription>
      */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserSubscription::class)]
+    #[Groups(['user:read', 'user:write'])]
     private Collection $userSubscriptions;
 
     public function __construct()

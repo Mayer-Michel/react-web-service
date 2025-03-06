@@ -38,6 +38,17 @@ class RegistrationController extends AbstractController
                 'message' => 'L\'email est déjà utilisé'
             ]);
         }
+        // On vérifie si l'utilisateur exite déja
+        $existingNickname = $entityManager
+        ->getRepository(User::class)
+        ->findOneBy(['nickname' => $data['nickname']]);
+
+        if($existingNickname){
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Le nickname est déjà utilisé'
+            ]);
+        }
 
         // On vérifie que l'email est au format email
         $validEmail = filter_var($data['email'], FILTER_VALIDATE_EMAIL);
@@ -48,10 +59,18 @@ class RegistrationController extends AbstractController
             ]);
         }
 
+        // On vérifie que le mdp n'est pas vide
+        if(empty($data['password'])){
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Le mot de passe ne peut pas être vide'
+            ]);
+        }
+
         //on crée un nouvel utilisateur
         $user = new User();
         //on lui set les paramètres
-        $user->setEmail($data['email']);
+        $user->setEmail(strtolower($data['email']));
         $user->setNickname($data['nickname']);
         $user->setPassword(
             $userPasswordHasher->hashPassword(

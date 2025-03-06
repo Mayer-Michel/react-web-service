@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\Get;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
@@ -18,6 +20,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Get()
     ],
     normalizationContext: ['groups' => ['subscriptionPlan:read']],
+)]
+
+#[ApiFilter(
+    SearchFilter::class,
+    properties: ['stripePriceId' => 'exact']
 )]
 class SubscriptionPlan
 {

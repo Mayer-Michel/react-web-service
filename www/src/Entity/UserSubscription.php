@@ -9,6 +9,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\UserSubscriptionRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -16,9 +18,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new GetCollection(),
-        new Get()
+        new Get(),
+        new Post(),
+        new Patch()
     ],
-    normalizationContext: ['groups' => ['subscriptionPlan:read']],
+    normalizationContext: ['groups' => ['subscription:read']],
+    denormalizationContext: ['groups' => ['subscription:write']]
 )]
 
 #[ApiFilter(
@@ -36,26 +41,27 @@ class UserSubscription
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'userSubscriptions')]
-    #[Groups(['subscription:read'])]
+    #[Groups(['subscription:read', 'subscription:write'])]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'userSubscriptions')]
-    #[Groups(['subscription:read'])]
+    #[Groups(['subscription:read', 'subscription:write'])]
     private ?SubscriptionPlan $plan = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['subscription:read'])]
+    #[Groups(['subscription:read', 'subscription:write'])]
     private ?string $stripeSubsciptionId = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['subscription:read'])]
+    #[Groups(['subscription:read', 'subscription:write'])]
     private ?\DateTimeInterface $startDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['subscription:read'])]
+    #[Groups(['subscription:read', 'subscription:write'])]
     private ?\DateTimeInterface $endDate = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['subscription:read', 'subscription:write'])]
     private ?string $status = null;
 
     public function getId(): ?int

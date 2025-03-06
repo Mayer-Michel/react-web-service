@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -13,7 +14,7 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): JsonResponse
     {
         //on vérifie si l'utilisateur est déjà connecté
-        if($this->getUser()){
+        if ($this->getUser()) {
             return new JsonResponse([
                 'success' => true,
                 'id' => $this->getUser()->getId(),
@@ -24,6 +25,14 @@ class SecurityController extends AbstractController
         }
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
+        
+        // Si j'ai $error on renvoi une erreur au format
+        if($error){
+            return new JsonResponse([
+                "success" => false,
+                "message" => "Email et/ou mot de passe incorrect"
+            ]);
+        }
 
         return new JsonResponse([
             'success' => true,

@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use Symfony\Bundle\SecurityBundle\Security as SecurityBundleSecurity;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
