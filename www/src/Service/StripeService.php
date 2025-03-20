@@ -3,8 +3,8 @@
 namespace App\Service;
 
 use Stripe\Price;
-use Stripe\Product;
 use Stripe\Stripe;
+use Stripe\Product;
 
 class StripeService
 {

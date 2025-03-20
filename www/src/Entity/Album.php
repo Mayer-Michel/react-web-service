@@ -52,15 +52,15 @@ class Album
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['album:read', 'artist:read', 'user:read', 'playlist:read'])]
+    #[Groups(['album:read', 'artist:read', 'user:read', 'playlist:read', 'song:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['album:read', 'artist:read', 'user:read', 'playlist:read'])]
+    #[Groups(['album:read', 'artist:read', 'user:read', 'playlist:read', 'song:read'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['album:read', 'artist:read', 'user:read', 'playlist:read'])]
+    #[Groups(['album:read', 'artist:read', 'user:read', 'playlist:read', 'song:read'])]
     private ?string $imagePath = null;
 
     #[ORM\Column]
@@ -70,7 +70,7 @@ class Album
     private ?int $updatedAt = null;
 
     #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'albums')]
-    #[Groups(['album:read', 'artist:read', 'user:read'])]
+    #[Groups(['album:read', 'artist:read', 'user:read', 'song:read'])]
     private Collection $genre;
 
     #[ORM\ManyToOne(inversedBy: 'albums')]
@@ -86,11 +86,11 @@ class Album
     private Collection $users;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['album:read', 'artist:read', 'user:read'])]
+    #[Groups(['album:read', 'artist:read', 'user:read', 'song:read'])]
     private ?\DateTimeInterface $releaseDate = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['album:read', 'artist:read', 'user:read'])]
+    #[Groups(['album:read', 'artist:read', 'user:read', 'song:read'])]
     private ?bool $isActive = null;
 
     public function __construct()

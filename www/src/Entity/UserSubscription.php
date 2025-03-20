@@ -37,7 +37,7 @@ class UserSubscription
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['subscription:read'])]
+    #[Groups(['subscription:read', 'user:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'userSubscriptions')]
@@ -45,23 +45,23 @@ class UserSubscription
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'userSubscriptions')]
-    #[Groups(['subscription:read', 'subscription:write'])]
+    #[Groups(['subscription:read', 'subscription:write', 'user:read'])]
     private ?SubscriptionPlan $plan = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['subscription:read', 'subscription:write'])]
+    #[Groups(['subscription:read', 'subscription:write', 'user:read'])]
     private ?string $stripeSubsciptionId = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['subscription:read', 'subscription:write'])]
+    #[Groups(['subscription:read', 'subscription:write', 'user:read'])]
     private ?\DateTimeInterface $startDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups(['subscription:read', 'subscription:write'])]
+    #[Groups(['subscription:read', 'subscription:write', 'user:read'])]
     private ?\DateTimeInterface $endDate = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['subscription:read', 'subscription:write'])]
+    #[Groups(['subscription:read', 'subscription:write', 'user:read'])]
     private ?string $status = null;
 
     public function getId(): ?int

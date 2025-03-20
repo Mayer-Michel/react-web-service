@@ -2,30 +2,48 @@
 
 namespace App\Entity;
 
-
+use ApiPlatform\Metadata\Get;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\SongRepository;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 use Symfony\Component\HttpFoundation\File\File;
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 
 #[ORM\Entity(repositoryClass: SongRepository::class)]
 #[Vich\Uploadable]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+    ],
+    normalizationContext: ['groups' => ['song:read']],
+)]
+
+#[ApiFilter(
+    BooleanFilter::class, properties:[
+        'album.isActive'
+    ]
+)]
+
 class Song
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['album:read', 'artist:read', 'user:read', 'playlist:read'])]
+    #[Groups(['album:read', 'artist:read', 'user:read', 'playlist:read', 'song:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['album:read', 'artist:read', 'user:read', 'playlist:read'])]
+    #[Groups(['album:read', 'artist:read', 'user:read', 'playlist:read', 'song:read'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['album:read', 'artist:read', 'user:read', 'playlist:read'])]
+    #[Groups(['album:read', 'artist:read', 'user:read', 'playlist:read', 'song:read'])]
     private ?string $filePath = null;
 
     #[Vich\UploadableField(mapping: 'songs', fileNameProperty: 'filePath')]
@@ -33,12 +51,12 @@ class Song
 
 
     #[ORM\Column]
-    #[Groups(['album:read', 'artist:read', 'user:read', 'playlist:read'])]
+    #[Groups(['album:read', 'artist:read', 'user:read', 'playlist:read', 'song:read'])]
     private ?int $duration = null;
 
     #[ORM\ManyToOne(inversedBy: 'songs')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['playlist:read'])]
+    #[Groups(['playlist:read', 'song:read'])]
     private ?Album $album = null;
 
     public function getId(): ?int
