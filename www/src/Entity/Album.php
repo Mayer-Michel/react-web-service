@@ -70,12 +70,12 @@ class Album
     private ?int $updatedAt = null;
 
     #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'albums')]
-    #[Groups(['album:read', 'artist:read', 'user:read', 'song:read'])]
+    #[Groups(['album:read', 'artist:read', 'user:read', 'song:read', 'playlist:read'])]
     private Collection $genre;
 
     #[ORM\ManyToOne(inversedBy: 'albums')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['album:read', 'user:read'])]
+    #[Groups(['album:read', 'user:read', 'song:read', 'playlist:read'])]
     private ?Artist $artist = null;
 
     #[ORM\OneToMany(mappedBy: 'album', targetEntity: Song::class)]
